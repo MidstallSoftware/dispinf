@@ -7,7 +7,7 @@ pub fn build(b: *std.Build) void {
     const no_tests = b.option(bool, "no-tests", "skip generating tests") orelse false;
 
     const module = b.addModule("dispinf", .{
-        .source_file = .{ .path = b.pathFromRoot("dispinf.zig") },
+        .root_source_file = .{ .path = b.pathFromRoot("dispinf.zig") },
     });
 
     const exe_example = b.addExecutable(.{
@@ -18,7 +18,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe_example.addModule("dispinf", module);
+    exe_example.root_module.addImport("dispinf", module);
     b.installArtifact(exe_example);
 
     if (!no_tests) {
